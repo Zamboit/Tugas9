@@ -1,8 +1,8 @@
 <?php
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set("display_errors", 1);
 
-include 'koneksi.php';
+include "koneksi.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_hp = $_POST['nama_hp'];
