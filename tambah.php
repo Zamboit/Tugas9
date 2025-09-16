@@ -5,10 +5,12 @@ ini_set("display_errors", 1);
 include "koneksi.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Menggunakan nama field yang benar: nama_hp (bukan name_lp)
     $nama_hp = $_POST['nama_hp'];
     $stok = $_POST['stok'];
     $harga = $_POST['harga'];
 
+    // Perbaikan query INSERT - gunakan nama field yang benar
     $sql = "INSERT INTO hp (nama_hp, stok, harga) VALUES ('$nama_hp', '$stok', '$harga')";
 
     if (mysqli_query($conn, $sql)) {
@@ -27,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Data HP</title>
     <style>
+        /* CSS tetap sama seperti sebelumnya */
         * {
             margin: 0;
             padding: 0;
