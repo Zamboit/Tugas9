@@ -160,6 +160,8 @@ $result = mysqli_query($conn, "SELECT * FROM hp ORDER BY id_hp DESC");
                     <tr>
                         <th>No</th>
                         <th>Nama HP</th>
+                        <th>Umur</th>
+                        <th>Email</th>
                         <th>Stok</th>
                         <th>Harga</th>
                         <th>Aksi</th>
@@ -173,6 +175,8 @@ $result = mysqli_query($conn, "SELECT * FROM hp ORDER BY id_hp DESC");
                             echo "<tr>";
                             echo "<td>" . $no++ . "</td>";
                             echo "<td>" . $row['nama_hp'] . "</td>";
+                            echo "<td>" . $row['umur'] . "</td>";
+                            echo "<td>" . $row['email'] . "</td>";
                             echo "<td>" . $row['stok'] . "</td>";
                             echo "<td>Rp " . number_format($row['harga'], 0, ',', '.') . "</td>";
                             echo "<td class='action-buttons'>";

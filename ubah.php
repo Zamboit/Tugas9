@@ -10,10 +10,12 @@ $row = mysqli_fetch_assoc($result);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nama_hp = $_POST['nama_hp'];
+    $umur = $_POST['umur'];
+    $email = $_POST['email'];
     $stok = $_POST['stok'];
     $harga = $_POST['harga'];
 
-    $sql = "UPDATE hp SET nama_hp='$nama_hp', stok='$stok', harga='$harga' WHERE id_hp=$id";
+    $sql = "UPDATE hp SET nama_hp='$nama_hp', umur='$umur', email='$email', stok='$stok', harga='$harga' WHERE id_hp=$id";
 
     if (mysqli_query($conn, $sql)) {
         header("Location: index.php");
@@ -161,6 +163,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-group">
                     <label for="nama_hp">Nama HP</label>
                     <input type="text" id="nama_hp" name="nama_hp" value="<?php echo $row['nama_hp']; ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="umur">Umur</label>
+                    <input type="number" id="umur" name="umur" min="0" value="<?php echo $row['umur']; ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="<?php echo $row['email']; ?>" required>
                 </div>
 
                 <div class="form-group">

@@ -7,11 +7,13 @@ include "koneksi.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Menggunakan nama field yang benar: nama_hp (bukan name_lp)
     $nama_hp = $_POST['nama_hp'];
+    $umur = $_POST['umur'];
+    $email = $_POST['email'];
     $stok = $_POST['stok'];
     $harga = $_POST['harga'];
 
     // Perbaikan query INSERT - gunakan nama field yang benar
-    $sql = "INSERT INTO hp (nama_hp, stok, harga) VALUES ('$nama_hp', '$stok', '$harga')";
+    $sql = "INSERT INTO hp (nama_hp, umur, email, stok, harga) VALUES ('$nama_hp', '$umur', '$email', '$stok', '$harga')";
 
     if (mysqli_query($conn, $sql)) {
         header("Location: index.php");
@@ -160,6 +162,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-group">
                     <label for="nama_hp">Nama HP</label>
                     <input type="text" id="nama_hp" name="nama_hp" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="umur">Umur</label>
+                    <input type="number" id="umur" name="umur" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
 
                 <div class="form-group">
