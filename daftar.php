@@ -6,27 +6,28 @@ include 'koneksi.php';
 
 $error = '';
 
-if (isset($_POST['login'])) {
+if (isset($_POST['register'])) {
     $username = mysqli_real_escape_string($conn, $_POST['username']);
     $password = $_POST['password'];
+    $confirm = $_POST['confirm'];
 
-    if ($username === '' || $password === '') {
-        $error = "Username dan password wajib diisi!";
+    if ($username === '' || $password === '' || $confirm === '') {
+        $error = "Semua kolom wajib diisi!";
+    } elseif ($password !== $confirm) {
+        $error = "Password dan konfirmasi tidak cocok!";
     } else {
+        // Cek username
         $result = mysqli_query($conn, "SELECT * FROM aman WHERE username='$username'");
-        if (mysqli_num_rows($result) === 1) {
-            $row = mysqli_fetch_assoc($result);
-            // Gunakan password_verify agar aman
-            if (password_verify($password, $row['password'])) {
-                $_SESSION['login'] = true;
-                $_SESSION['username'] = $row['username'];
-                header("Location: index.php");
-                exit;
-            } else {
-                $error = "Password salah!";
-            }
+        if (mysqli_num_rows($result) > 0) {
+            $error = "Username sudah terdaftar!";
         } else {
-            $error = "Username tidak ditemukan!";
+            // Simpan password aman
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+            mysqli_query($conn, "INSERT INTO aman (username, password) VALUES ('$username', '$hashed')");
+            $_SESSION['login'] = true;
+            $_SESSION['username'] = $username;
+            header("Location: index.php");
+            exit;
         }
     }
 }
@@ -37,7 +38,7 @@ if (isset($_POST['login'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Daftar Akun</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <style>
         body {
@@ -49,7 +50,7 @@ if (isset($_POST['login'])) {
             height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .login-box {
+        .register-box {
             background: rgba(40, 40, 60, 0.97);
             padding: 48px 36px;
             border-radius: 20px;
@@ -68,9 +69,6 @@ if (isset($_POST['login'])) {
             color: #00adb5;
             letter-spacing: 1px;
         }
-        h2 .fa-user-lock {
-            margin-right: 10px;
-        }
         input[type="text"], input[type="password"] {
             width: 100%;
             padding: 14px;
@@ -86,7 +84,7 @@ if (isset($_POST['login'])) {
             box-shadow: 0 0 0 2px #00adb5;
             outline: none;
         }
-        .btn-login {
+        .btn-register {
             background: linear-gradient(90deg, #00adb5 0%, #007b7f 100%);
             color: #fff;
             border: none;
@@ -95,10 +93,9 @@ if (isset($_POST['login'])) {
             font-size: 1.1rem;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.2s, transform 0.2s;
-            margin-top: 10px;
+            transition: 0.2s;
         }
-        .btn-login:hover {
+        .btn-register:hover {
             background: linear-gradient(90deg, #007b7f 0%, #00adb5 100%);
             transform: scale(1.04);
         }
@@ -109,7 +106,6 @@ if (isset($_POST['login'])) {
             border-radius: 10px;
             margin-bottom: 18px;
             font-size: 1rem;
-            box-shadow: 0 2px 8px rgba(255,23,68,0.12);
         }
         a {
             color: #00adb5;
@@ -119,15 +115,16 @@ if (isset($_POST['login'])) {
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2><i class="fa-solid fa-user-lock"></i> Login</h2>
-        <?php if ($error) { echo '<div class="error">'.$error.'</div>'; } ?>
+    <div class="register-box">
+        <h2><i class="fa-solid fa-user-plus"></i> Daftar Akun</h2>
+        <?php if ($error) echo '<div class="error">'.$error.'</div>'; ?>
         <form method="post" autocomplete="off">
-            <input type="text" name="username" placeholder="&#xf007;  Username" style="font-family:inherit,FontAwesome" autofocus required>
+            <input type="text" name="username" placeholder="&#xf007;  Username" style="font-family:inherit,FontAwesome" required>
             <input type="password" name="password" placeholder="&#xf084;  Password" style="font-family:inherit,FontAwesome" required>
-            <button type="submit" name="login" class="btn-login"><i class="fa-solid fa-sign-in-alt"></i> Login</button>
+            <input type="password" name="confirm" placeholder="&#xf00c;  Konfirmasi Password" style="font-family:inherit,FontAwesome" required>
+            <button type="submit" name="register" class="btn-register"><i class="fa-solid fa-user-plus"></i> Daftar</button>
         </form>
-        <p style="margin-top:18px;">Belum punya akun? <a href="daftar.php">Daftar sekarang</a></p>
+        <p style="margin-top:18px;">Sudah punya akun? <a href="login.php">Login di sini</a></p>
     </div>
 </body>
 </html>
